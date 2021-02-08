@@ -10,15 +10,15 @@ public class CircularBuffer<E> {
 		super();
 		create(size);
 	}
-
+	private static final int DEFAULT_SIZE = 10;
 	private int size;
 	private int writerPointer = -1;
 	private int readPointer = 0;
 	private E[] data;
 
 	private void create() {
-		this.size = 10;
-		this.data = (E[]) new Object[10];
+		this.size = DEFAULT_SIZE;
+		this.data = (E[]) new Object[DEFAULT_SIZE];
 	}
 
 	public void create(int size) {
@@ -47,12 +47,12 @@ public class CircularBuffer<E> {
 
 	public int getSize() {
 
-		return this.size;
+		return data.length;
 	}
 
 	public boolean isEmpty() {
 
-		return this.size == 0;
+		return readPointer == writerPointer;
 	}
 
 	public boolean isFull() {
