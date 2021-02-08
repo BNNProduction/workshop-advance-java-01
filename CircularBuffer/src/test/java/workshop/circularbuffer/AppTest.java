@@ -13,7 +13,7 @@ public class AppTest {
 	
 	@Test
 	public void caseCreateCircularbuffer_ByDefaultSize() {
-		CircularBuffer<String> c = new CircularBuffer<String>();
+		CircularBuffer<String> c = new CircularBuffer<String>(); 
 		assertEquals(10, c.getSize());
 	}
 	
