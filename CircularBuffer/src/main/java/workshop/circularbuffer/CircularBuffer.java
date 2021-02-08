@@ -28,21 +28,20 @@ public class CircularBuffer<E> {
 
 	public void write(E input) throws Exception {
 		if (!isFull()) {
-			int next = writerPointer + 1;
-			data[next % size] = input;
-			writerPointer++;
+			
+			data[(++writerPointer) % size] = input;
 		}else {
 			throw new Exception("Buffer Overflow");
 		}
 	}
 
 	public E read() throws Exception {
-		if (readPointer >= writerPointer) {
-			E val = data[readPointer % size];
-			readPointer++;
+		if (readPointer <= writerPointer) {
+			E val = data[(readPointer++) % size];
 			return val;
+		}else {
+			throw new Exception("Read Overflow");
 		}
-		return null;
 	}
 
 	public int getSize() {
@@ -52,7 +51,7 @@ public class CircularBuffer<E> {
 
 	public boolean isEmpty() {
 
-		return readPointer == writerPointer;
+		return readPointer - writerPointer == 0;
 	}
 
 	public boolean isFull() {

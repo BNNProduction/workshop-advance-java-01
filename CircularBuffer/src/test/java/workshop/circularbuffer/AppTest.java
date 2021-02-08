@@ -1,15 +1,11 @@
 package workshop.circularbuffer;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import org.junit.Rule;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
 
 public class AppTest {
-
-	@Rule
-	public ExpectedException exceptionRule = ExpectedException.none();
 
 	@Test
 	public void caseCreateCircularbuffer_ByDefaultSize() {
@@ -36,9 +32,22 @@ public class AppTest {
 		CircularBuffer<String> c = new CircularBuffer<String>(1);
 		assertEquals(1, c.getSize());
 		c.write("BOBOOBUA1");
-		exceptionRule.expect(Exception.class);
-		exceptionRule.expectMessage("Buffer Overflow");
-		c.write("OVERFLOW");
+		assertThrows(Exception.class, () -> {
+			c.write("OverFlow");
+		});
+	}
+
+	@Test
+	public void caseTest_ReadOverflow() throws Exception {
+		final CircularBuffer<String> c = new CircularBuffer<String>(1);
+		assertEquals(1, c.getSize());
+		c.write("BOBOOBUA1");
+		assertThrows(Exception.class, () -> {
+			System.out.println(c.read());
+			System.out.println(c.read());
+			System.out.println(c.read());
+		});
+
 	}
 
 }
