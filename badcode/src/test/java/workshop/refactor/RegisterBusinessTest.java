@@ -1,6 +1,8 @@
 package workshop.refactor;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -248,7 +250,7 @@ public class RegisterBusinessTest {
 
 	}
 	@Test
-	public void register_exp_more_than_9() {
+	public void register_exp_more_than_91() {
 		// Arrange
 		RegisterBusiness registerBusiness = new RegisterBusiness();
 		Speaker newSpeaker = new Speaker();
@@ -273,6 +275,14 @@ public class RegisterBusinessTest {
 		assertEquals(100, speakerId);
 		assertEquals(0, newSpeaker.getRegistrationFee());
 
+	}
+	
+	@ParameterizedTest
+	@CsvSource({"1,500", "2,250", "3,250","4,100","9,50","10,0"})
+	public void testgetfee(int exp,int fee) {
+		RegisterBusiness registerBusiness = new RegisterBusiness();
+		assertEquals(fee,registerBusiness.getfee(exp));
+		
 	}
 
 }
