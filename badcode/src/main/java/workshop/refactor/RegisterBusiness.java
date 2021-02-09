@@ -3,44 +3,48 @@ package workshop.refactor;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.platform.commons.util.StringUtils;
+
 public class RegisterBusiness {
 
 	public Integer register(SpeakerRepository repository, Speaker speaker) {
 		Integer speakerId = null;
-		
-		if (validate(speaker)) {
-			if(repository == null) {
-				throw new SaveSpeakerException("Can't save a speaker.");
-			}
-			int exp = speaker.getExp();
-			speaker.setRegistrationFee(getfee(exp));
-			speakerId = repository.saveSpeaker(speaker);
+		validate(speaker);
+		if (repository == null) {
+			throw new SaveSpeakerException("Can't save a speaker.");
 		}
+		int exp = speaker.getExp();
+		speaker.setRegistrationFee(getfee(exp));
+		speakerId = repository.saveSpeaker(speaker);
 
 		return speakerId;
 	}
-	
-	public boolean validate(Speaker speaker) {
-		String[] domains = { "gmail.com", "live.com" };
 
-		if (!(speaker.getFirstName() != null && !speaker.getFirstName().trim().equals(""))) {
+	public void validate(Speaker speaker) {
+		String[] domains = { "gmail.com", "live.com" };
+		if (validateStr(speaker.getFirstName())) {
 			throw new ArgumentNullException("First name is required.");
 		}
 
-		if (!(speaker.getLastName() != null && !speaker.getLastName().trim().equals(""))) {
+		if (validateStr(speaker.getLastName())) {
 			throw new ArgumentNullException("Last name is required.");
 		}
 
-		if (!(speaker.getEmail() != null && !speaker.getEmail().trim().equals(""))) {
+		if (validateStr(speaker.getEmail())) {
 			throw new ArgumentNullException("Email is required.");
 		}
-		
+
 		String emailDomain = getEmail(speaker.getEmail());
 
 		if (Arrays.stream(domains).filter(it -> it.equals(emailDomain)).count() != 1) {
 			throw new SpeakerDoesntMeetRequirementsException("Speaker doesn't meet our standard rules.");
 		}
-		return true;
+
+	}
+
+	public boolean validateStr(String val) {
+
+		return !(val != null && !val.trim().isEmpty());
 
 	}
 
